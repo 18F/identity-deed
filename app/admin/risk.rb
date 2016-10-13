@@ -2,11 +2,16 @@ ActiveAdmin.register Risk do
   menu priority: 3
 
   permit_params :description, :likelihood, :impact, :summary, :data_action_id,
-                :assessment_completed
+                :assessment_completed, :activity_type
 
   form do |f|
     inputs do
-      input :data_action, collection: DataAction.all.map {|a| ["#{a.id} #{a.complete_title}", a.id]}
+      input :data_action,
+        collection: options_for_select(
+          DataAction.all.map {|a| ["#{a.id} #{a.complete_title}", a.id]},
+          params[:data_action_id]
+        )
+      input :activity_type, collection: Risk::ACTIVITY_TYPES
       input :description, as: :text
     end
     inputs 'Assessment' do
@@ -22,10 +27,18 @@ ActiveAdmin.register Risk do
     selectable_column
     id_column
     column 'Flow' do |risk|
-      link_to risk.flow.title, admin_flow_path(risk.flow)
+      if risk.flow
+        link_to risk.flow.title, admin_flow_path(risk.flow)
+      else
+        span "?"
+      end
     end
     column 'Data Action' do |risk|
-      link_to risk.data_action.title, admin_data_action_path(risk.data_action)
+      if risk.data_action
+        link_to risk.data_action.title, admin_data_action_path(risk.data_action)
+      else
+        "?"
+      end
     end
     column 'Description' do |risk|
       truncate(risk.description)
@@ -54,5 +67,4 @@ ActiveAdmin.register Risk do
   filter :summary
   filter :impact
   filter :likelihood
-
 end
