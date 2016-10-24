@@ -66,12 +66,13 @@ ActiveRecord::Schema.define(version: 20161012113100) do
 
   create_table "risks", force: :cascade do |t|
     t.string   "description"
-    t.integer  "likelihood",     default: 0
-    t.integer  "impact",         default: 0
+    t.integer  "likelihood",           default: 0
+    t.integer  "impact",               default: 0
     t.string   "summary"
+    t.boolean  "assessment_completed"
     t.integer  "data_action_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
 end
