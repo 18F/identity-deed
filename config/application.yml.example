@@ -1,3 +1,4 @@
 demo_user_password: "PASSWORDFORDEMOUSER"
 basic_auth_username: "BASICAUTHUSERNAME"
 basic_auth_password: "BASICAUTHPASSWORD"
+secret_key_base: "e57935fff5ab78c15547527ba387cc369369.............."
