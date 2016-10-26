@@ -8,6 +8,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 
 gem 'activeadmin', '~> 1.0.0.pre4'
+gem 'activeadmin_addons', '0.9.3'
 gem 'devise'
 gem 'puma'
 
