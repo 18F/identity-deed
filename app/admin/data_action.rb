@@ -1,13 +1,18 @@
 ActiveAdmin.register DataAction do
   menu priority: 2
 
-  permit_params :title, :description, :flow_id
+  permit_params :title, :description, :flow_id,
+                :collection, :retention, :generation, :transformation,
+                :disclosure, :transmission, :disposal
 
   form do |f|
     inputs do
       input :flow
       input :title
       input :description, as: :text
+      Risk::ACTIVITY_TYPES.each do |activity|
+        input activity.intern
+      end
     end
     actions
   end
@@ -15,6 +20,13 @@ ActiveAdmin.register DataAction do
   index do
     selectable_column
     id_column
+    column 'Flow' do |a|
+      if a.flow
+        link_to a.flow.title, admin_flow_path(a.flow)
+      else
+        span "?"
+      end
+    end
     column 'Title' do |a|
       link_to a.title, admin_data_action_path(a)
     end
@@ -33,30 +45,36 @@ ActiveAdmin.register DataAction do
       row :flow
       row :title
       row :description
+      row :all_activities_covered
+      list_row :undefined_activities unless data_action.all_activities_covered
       row :created_at
       row :updated_at
       row :id
+      row 'Actions' do
+        link_to "Add New Risk", new_admin_risk_path(data_action_id: data_action.id)
+      end
     end
-    panel 'Risks' do
-      if data_action.risks.any?
-        data_action.risks.each do |risk|
-          ul do
-            li do
-              span do
-                link_to("Edit", edit_admin_risk_path(risk)) + " #{risk.description}"
-              end
-            end
-          end
-        end
-      else
-        div "No risks are associated with this Data Action."
-      end
-      div do
-        link_to "New Risk", new_admin_risk_path(data_action_id: data_action.id)
-      end
+
+    if data_action.risks.any?
+      render "admin/data_actions/risks", risks: data_action.risks, context: self
+    else
+      div "No risks are associated with this Data Action."
     end
     active_admin_comments
   end
 
+  scope :all
+  scope :covered
+
+  action_item :add_risk, only: [:show] do
+    link_to "Add Risk", new_admin_risk_path(data_action_id: data_action.id)
+  end
+
+  sidebar "Instructions", only: [:edit, :new] do
+    ul do
+      li "Prompts, and"
+      li "other things to consider."
+    end
+  end
 
 end
