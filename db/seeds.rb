@@ -1,26 +1,20 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
-
-ben = {
-  email: 'benjamin_c_damman@omb.eop.gov',
-  password: 'password',
-  password_confirmation: 'password'
-}
+password = Figaro.env.demo_user_password
 
 john = {
   email: 'john.rahaghi@gsa.gov',
-  password: 'password',
-  password_confirmation: 'password'
+  password: password,
+  password_confirmation: password
 }
 
-AdminUser.create!(ben)
-AdminUser.create!(john)
+AdminUser.find_or_create_by!(email: john[:email]) do |user|
+  user.password = user[:password]
+  user.password_confirmation = user[:password_confirmation]
+end
 
-Flow.create!(title: 'Enrollment', description: 'New user registration / sign up')
-Flow.create!(title: 'Account Management', description: 'Users can view and modify their account profile and settings')
+Flow.find_or_create_by!(title: 'Enrollment') do |flow|
+  flow.description =  'New user registration / sign up'
+end
+
+Flow.find_or_create_by!(title: 'Account Management') do |flow|
+  flow.description =  'Users can view and modify their account profile and settings'
+end

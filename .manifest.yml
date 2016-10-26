@@ -1,0 +1,11 @@
+---
+applications:
+- name: identity-deeds
+  buildpack: https://github.com/cloudfoundry/ruby-buildpack.git
+  command: script/start
+  domain: 18f.gov
+  host: identity-deeds
+  instances: 1
+  memory: 900MB
+  services:
+    - identity-deed-db

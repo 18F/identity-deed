@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20161012191945) do
     t.integer  "likelihood",           default: 0
     t.integer  "impact",               default: 0
     t.string   "summary"
+    t.boolean  "assessment_completed"
     t.integer  "data_action_id"
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false

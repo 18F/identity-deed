@@ -1,0 +1,3 @@
+demo_user_password: "PASSWORDFORDEMOUSER"
+basic_auth_username: "BASICAUTHUSERNAME"
+basic_auth_password: "BASICAUTHPASSWORD"
